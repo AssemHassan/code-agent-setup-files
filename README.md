@@ -27,16 +27,22 @@ A centralized `.agents/` directory and a universal `AGENTS.md` instruction file 
 ## Quick Start
 
 ```bash
-# 1. Run the interactive setup script
-./setup.sh
+# 1. Run the interactive setup script with a target directory
+./setup.sh ./my-project
 
 # 2. Select your AI agents (OpenCode, Claude Code, Cursor, etc.)
-#    The script creates the .agents/ directory structure, writes
-#    agent-specific configs, and symlinks skills into each agent's
-#    private config directory.
+#    The script downloads the latest AGENTS.md, skills, and spec
+#    templates from GitHub, creates agent-specific configs, and
+#    symlinks skills into each agent's private config directory.
 
 # 3. Start coding — agents read shared context from AGENTS.md,
 #    load skills from .agents/skills/, and follow spec-driven protocol.
+```
+
+On Windows (PowerShell):
+
+```powershell
+.\setup.ps1 .\my-project
 ```
 
 ## Supported Agents
@@ -58,11 +64,20 @@ A centralized `.agents/` directory and a universal `AGENTS.md` instruction file 
 
 ## Adding a New Skill
 
-Skills are shared across all agents. Create a file at `.agents/skills/<skill-name>/SKILL.md` with instructions for what the skill does. The setup script symlinks this directory into each agent's private config so every agent can load it.
+Skills are shared across all agents. Create a file at `.agents/skills/<skill-name>/SKILL.md` with instructions for what the skill does. Then update the `files` section in `manifest.json` with an initial version. The setup script symlinks this directory into each agent's private config so every agent can load it.
+
+## Setup Scripts
+
+| Platform | Script | Source |
+|---|---|---|
+| Linux / macOS | `setup.sh` | Downloads `AGENTS.md`, skills, and specs from the GitHub repo |
+| Windows | `setup.ps1` | Same logic via PowerShell with `Invoke-WebRequest` |
+
+Both scripts use `manifest.json` to track artifact versions and prompt to overwrite when a newer version is available.
 
 ## Requirements
 
-- Bash shell
+- Bash **or** PowerShell 5+
 - Git
 
 ## License
